@@ -1,47 +1,4 @@
-<?php
-// Database connection parameters
-$servername = "your_server_name";
-$username = "your_username";
-$password = "your_password";
-$dbname = "your_database_name";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $warehouse = $_POST['warehouse'];
-    $booking_date = $_POST['date'];
-    $message = $_POST['message'];
-
-    // Prepare and bind
-    $stmt = $conn->prepare("INSERT INTO warehouse_bookings (name, email, phone, warehouse, booking_date, message) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $name, $email, $phone, $warehouse, $booking_date, $message);
-
-    // Execute the statement
-    if ($stmt->execute()) {
-        echo "Booking successful!";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    // Close statement
-    $stmt->close();
-}
-
-// Close connection
-$conn->close();
-?>
-
+<?php include 'includes/db.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,12 +54,12 @@ $conn->close();
         }
         .booking-form .form-group button {
             display: block;
-    width: 100%;
-    padding: 10px;
-    background: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
         }
         .booking-form .form-group button:hover {
             background: #77aaff;
@@ -110,41 +67,49 @@ $conn->close();
     </style>
 </head>
 <body>
-    <form class="booking-form" action="book_warehouse.php" method="post">
-        <h2>Book a Warehouse</h2>
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" required>
-        </div>
-        <div class="form-group">
-            <label for="warehouse">Select Warehouse</label>
-            <!-- <select id="warehouse" name="warehouse" required>
-                <option value="">Choose...</option>
-                <option value="warehouse1">Warehouse 1 - Mumbai, Maharashtra</option>
-                <option value="warehouse2">Warehouse 2 - Pune, Maharashtra</option>
-                <option value="warehouse3">Warehouse 3 - Bangalore, Karnataka</option>
-                <!-- Add more options as needed -->
-            </select> -->
-        </div>
-        <div class="form-group">
-            <label for="date">Booking Date</label>
-            <input type="date" id="date" name="date" required>
-        </div>
-        <div class="form-group">
-            <label for="message">Additional Information</label>
-            <textarea id="message" name="message" rows="4"></textarea>
-        </div>
-        <div class="form-group">
-            <button type="submit">Book Now</button>
-        </div>
-    </form>
+    <?php
+    if (isset($_GET['id'])) {
+        $warehouse_id = $_GET['id'];
+
+        // Fetch warehouse details from the database
+        $stmt = $pdo->prepare('SELECT * FROM warehouses WHERE id = ?');
+        $stmt->execute([$warehouse_id]);
+        $warehouse = $stmt->fetch();
+
+        if ($warehouse) {
+            echo '<form class="booking-form" action="process_booking.php" method="post">
+                    <h2>Book a Warehouse</h2>
+                    <input type="hidden" name="warehouse_id" value="' . htmlspecialchars($warehouse['id']) . '">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Booking Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Additional Information</label>
+                        <textarea id="message" name="message" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Book Now</button>
+                    </div>
+                </form>';
+        } else {
+            echo '<p>Warehouse not found.</p>';
+        }
+    } else {
+        echo '<p>No warehouse selected.</p>';
+    }
+    ?>
 </body>
 </html>

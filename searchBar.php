@@ -32,7 +32,7 @@
             border: none;
             border-radius: 25px;
             margin-left: 10px;
-            background-color: #007BFF;
+            background-color: #333;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -46,6 +46,7 @@
     <div class="search-container">
         <input type="text" class="search-bar" placeholder="Search...">
         <button class="search-button">Search</button>
+        <a href="./booking_form.php"><button class="booking-button">Book A Warehouse</button></a>
     </div>
 </body>
 </html>

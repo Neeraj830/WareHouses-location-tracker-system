@@ -1,9 +1,10 @@
+<?php include 'includes/db.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <title>Warehouse Management System</title>
 </head>
 <body>
@@ -27,17 +28,14 @@
         <div class="container">
             <h1>Manage Your Warehouses Efficiently</h1>
             <p>Upload details about your warehouse and find the perfect warehouse according to your needs.</p>
-        
+        </div>
     </section>
-    <?php include 'searchBar.php'; ?>
-    <a href="./booking_form.php"><button>Book A Warehouse</button></a>
-    
+
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Search...">
+        <button class="search-button">Search</button></br>
+        <a href="booking_form.php"><button class="booking-button">Book a Warehouse</button></a>
+        <a href="add_warehouse.php"><button class="add-warehouse-button">Add Warehouse</button></a>
+    </div>
 </body>
 </html>
-
-
-
-
-
-<!-- WareHouses-location-tracker -->
-<!-- The Warehouses Location Tracker project is designed to monitor and manage the locations of warehouses efficiently. It provides real-time tracking, optimizes logistics, and improves inventory management by leveraging GPS technology and data analytics for enhanced operational efficiency. -->

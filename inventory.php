@@ -1,4 +1,3 @@
-
 <?php include 'includes/db.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,13 +34,19 @@
 
             if ($warehouses) {
                 echo '<table>';
-                echo '<tr><th>Name</th><th>Size (sqft)</th><th>Location</th><th>Rent ($)</th></tr>';
+                echo '<tr><th>Name</th><th>Size (sqft)</th><th>Location</th><th>Rent ($)</th><th>Action</th></tr>';
                 foreach ($warehouses as $warehouse) {
                     echo '<tr>';
                     echo '<td>' . htmlspecialchars($warehouse['name']) . '</td>';
                     echo '<td>' . htmlspecialchars($warehouse['size']) . '</td>';
                     echo '<td>' . htmlspecialchars($warehouse['location']) . '</td>';
                     echo '<td>' . htmlspecialchars($warehouse['rent']) . '</td>';
+                    echo '<td>
+                              <form action="booking_form.php" method="get">
+                                  <input type="hidden" name="id" value="' . htmlspecialchars($warehouse['id']) . '">
+                                  <button type="submit">Book Now</button>
+                              </form>
+                          </td>';
                     echo '</tr>';
                 }
                 echo '</table>';
